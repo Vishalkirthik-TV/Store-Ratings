@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 router.post('/signup', async (req, res) => {
     try {
         console.log("Signed up Successfully")
