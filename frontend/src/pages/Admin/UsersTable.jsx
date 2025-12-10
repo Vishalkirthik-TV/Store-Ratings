@@ -1,0 +1,94 @@
+import React from 'react';
+
+function UsersTable({ users, filters, sortConfig, onFilterChange, onSort }) {
+    return (
+        <div>
+            <div className="flex gap-4 mb-6 flex-wrap">
+                <input
+                    type="text"
+                    name="name"
+                    placeholder="Filter by name"
+                    value={filters.name}
+                    onChange={onFilterChange}
+                    className="flex-1 min-w-[150px] p-4 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+                />
+                <input
+                    type="text"
+                    name="email"
+                    placeholder="Filter by email"
+                    value={filters.email}
+                    onChange={onFilterChange}
+                    className="flex-1 min-w-[150px] p-4 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+                />
+                <input
+                    type="text"
+                    name="address"
+                    placeholder="Filter by address"
+                    value={filters.address}
+                    onChange={onFilterChange}
+                    className="flex-1 min-w-[150px] p-4 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+                />
+                <select
+                    name="role"
+                    value={filters.role}
+                    onChange={onFilterChange}
+                    className="flex-1 min-w-[150px] p-4 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-purple-500"
+                >
+                    <option value="">All Roles</option>
+                    <option value="admin">Admin</option>
+                    <option value="user">User</option>
+                    <option value="store_owner">Store Owner</option>
+                </select>
+            </div>
+
+            <div className="overflow-x-auto mt-6">
+                <table className="w-full border-collapse bg-white rounded-lg overflow-hidden">
+                    <thead className="bg-gradient-to-r from-purple-500 to-purple-700 text-white">
+                        <tr>
+                            <th
+                                onClick={() => onSort('name')}
+                                className="p-4 text-left font-semibold cursor-pointer select-none transition-colors hover:bg-white/10"
+                            >
+                                Name {sortConfig.key === 'name' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th
+                                onClick={() => onSort('email')}
+                                className="p-4 text-left font-semibold cursor-pointer select-none transition-colors hover:bg-white/10"
+                            >
+                                Email {sortConfig.key === 'email' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th
+                                onClick={() => onSort('address')}
+                                className="p-4 text-left font-semibold cursor-pointer select-none transition-colors hover:bg-white/10"
+                            >
+                                Address {sortConfig.key === 'address' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th
+                                onClick={() => onSort('role')}
+                                className="p-4 text-left font-semibold cursor-pointer select-none transition-colors hover:bg-white/10"
+                            >
+                                Role {sortConfig.key === 'role' && (sortConfig.direction === 'asc' ? '↑' : '↓')}
+                            </th>
+                            <th className="p-4 text-left font-semibold">Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map(user => (
+                            <tr key={user.id} className="border-b border-gray-200 transition-colors hover:bg-gray-50">
+                                <td className="p-4 text-gray-800">{user.name}</td>
+                                <td className="p-4 text-gray-800">{user.email}</td>
+                                <td className="p-4 text-gray-800">{user.address}</td>
+                                <td className="p-4 text-gray-800">{user.role}</td>
+                                <td className="p-4 text-gray-800">
+                                    {user.role === 'store_owner' ? parseFloat(user.rating).toFixed(1) : 'N/A'}
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+}
+
+export default UsersTable;
