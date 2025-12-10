@@ -1,21 +1,21 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, AuthContext } from './context/AuthContext.jsx';
-import Login from './pages/Login.jsx';
-import Signup from './pages/Signup.jsx';
-import AdminDashboard from './pages/AdminDashboard.jsx';
-import UserDashboard from './pages/UserDashboard.jsx';
-import StoreOwnerDashboard from './pages/StoreOwnerDashboard.jsx';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import AdminDashboard from './pages/Admin/AdminDashboard';
+import UserDashboard from './pages/User/UserDashboard';
+import StoreOwnerDashboard from './pages/StoreOwner/StoreOwnerDashboard';
 
-function ProtectedRoute({ children, role }) {
-  const { user } = useContext(AuthContext);
+function ProtectedRoute({ children, allowedRoles }) {
+  const { user } = React.useContext(AuthContext);
 
   if (!user) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
-  if (role && user.role !== role) {
-    return <Navigate to="/login" />;
+  if (allowedRoles && !allowedRoles.includes(user.role)) {
+    return <Navigate to="/login" replace />;
   }
 
   return children;
@@ -31,7 +31,7 @@ function App() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute role="admin">
+              <ProtectedRoute allowedRoles={['admin']}>
                 <AdminDashboard />
               </ProtectedRoute>
             }
@@ -39,7 +39,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute role="user">
+              <ProtectedRoute allowedRoles={['user']}>
                 <UserDashboard />
               </ProtectedRoute>
             }
@@ -47,12 +47,12 @@ function App() {
           <Route
             path="/store-owner"
             element={
-              <ProtectedRoute role="store_owner">
+              <ProtectedRoute allowedRoles={['store_owner']}>
                 <StoreOwnerDashboard />
               </ProtectedRoute>
             }
           />
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
